@@ -11,5 +11,9 @@
         <Button Content="End recording" Click="StopRecording" Margin="628,198,32,180" Height="NaN" Width="NaN" Background="#FFEF8790" FontWeight="Bold" FontStyle="Italic"/>
         <Button Content="Choose path" Click="GetPath" Height="NaN" Margin="323,80,323,313" Width="NaN"/>
         <TextBox x:Name="FilePath" Margin="159,22,188,372" IsEnabled="False"/>
+        <Button Content="Play&#xD;&#xA;" Click="PlaySound" Height="NaN" Margin="323,323,323,70" Width="NaN"/>
+        <Button Content="Stream audio&#xD;&#xA;" Click="StreamAudio" Height="NaN" Margin="34,316,612,62" Width="NaN" Background="#FF5B9682" FontWeight="Bold" FontStyle="Italic"/>
+        <Button Content="Receive&#xD;&#xA;" Click="ReceiveAudio" Margin="628,316,32,62" Height="NaN" Width="NaN" Background="#FFEF8790" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBox x:Name="IP" Margin="10,275,570,139" TextChanged="FilePath_Copy_TextChanged"/>
     </Grid>
 </Window>

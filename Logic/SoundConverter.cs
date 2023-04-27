@@ -1,5 +1,9 @@
 ﻿using NAudio;
 using NAudio.Wave;
+using System.Net.Sockets;
+using System.Net;
+using System.IO;
+using Microsoft.VisualBasic;
 
 namespace Logic
 {
@@ -7,8 +11,10 @@ namespace Logic
     public class SoundConverter
     {
         WaveInEvent waveIn;
+        WaveInEvent waveInStreaming;
         string outputPath;
         WaveFileWriter writer;
+
 
         public SoundConverter()
         {
@@ -23,12 +29,12 @@ namespace Logic
                 WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
                 BufferMilliseconds = 100 // Czas buforowania próbek
             };
-            
-            
+
+
         }
         public void SetSavePath(string path)
         {
-            outputPath = path; 
+            outputPath = path;
             writer = new WaveFileWriter(outputPath, waveIn.WaveFormat);
             // Obsługa zdarzenia zakończenia nagrywania
             waveIn.DataAvailable += (sender, e) =>
@@ -47,5 +53,73 @@ namespace Logic
             // Zakończenie zapisu do pliku WAV
             writer.Dispose();
         }
-    }
+
+        public void Play(string filePath)
+        {
+            Task.Run(() =>
+            {
+                // Utworzenie obiektu odtwarzacza
+                using (var waveOut = new WaveOutEvent())
+                {
+                    // Utworzenie obiektu czytającego z pliku WAV
+                    using (var audioFile = new AudioFileReader(filePath))
+                    {
+                        // Dodanie czytacza do odtwarzacza
+                        waveOut.Init(audioFile);
+
+                        // Odtworzenie pliku WAV
+                        waveOut.Play();
+
+                        // Oczekiwanie na zakończenie odtwarzania
+                        while (waveOut.PlaybackState == PlaybackState.Playing)
+                        {
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        waveOut.Dispose();
+                    }
+                }
+            });
+            
+        }
+        public void StreamAudio(string IP)
+        {
+
+            Task.Run(()=> { waveIn.StartRecording(); });
+            waveInStreaming.DataAvailable += (sender, args) =>
+            {
+                // Send the audio data to the receiving PC
+                UdpClient udpClient = new UdpClient();
+                udpClient.Send(args.Buffer, args.BytesRecorded, new IPEndPoint(IPAddress.Parse(IP), 8000));
+            };
+            Task.Delay(10000).Wait();
+            waveInStreaming.StopRecording();
+        }
+        public void ReceiveAudio()
+        {
+            UdpClient udpClient = new UdpClient(8000);
+            
+            WaveOutEvent waveOut = new WaveOutEvent();
+            WaveFormat waveFormat = new WaveFormat(44100, 16, 1); // Assuming the audio is in stereo and 44100 Hz sample rate
+
+            while (true)
+            {
+                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 8000);
+                byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
+                using (MemoryStream memoryStream = new MemoryStream(audioData))
+                {
+                    using (WaveStream waveStream = new RawSourceWaveStream(memoryStream, waveFormat))
+                    {
+                        waveOut.Play();
+                        waveOut.Init(waveStream);
+                        while (waveOut.PlaybackState == PlaybackState.Playing)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
+                }
+            }
+        }
+
+
+    };
 }
