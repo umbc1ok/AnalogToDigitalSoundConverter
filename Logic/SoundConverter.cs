@@ -85,12 +85,12 @@ namespace Logic
                     }
                 }
             });
-            
+
         }
         public void StreamAudio(string IP)
         {
             UdpClient udpClient = new UdpClient(12000);
-            Task.Run(()=> { waveInStreaming.StartRecording(); });
+            Task.Run(() => { waveInStreaming.StartRecording(); });
             waveInStreaming.DataAvailable += (sender, args) =>
             {
                 // Send the audio data to the receiving PC
@@ -103,32 +103,34 @@ namespace Logic
         public void ReceiveAudio(string IP)
         {
             UdpClient udpClient = new UdpClient(12000);
-            
+
             WaveOutEvent waveOut = new WaveOutEvent();
             WaveFormat waveFormat = new WaveFormat(44100, 16, 1); // Assuming the audio is in stereo and 44100 Hz sample rate
 
             Task.Run(() =>
             {
-                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12000);
-                byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
-                using (MemoryStream memoryStream = new MemoryStream(audioData))
+                while (true)
                 {
-                    using (WaveStream waveStream = new RawSourceWaveStream(memoryStream, waveFormat))
+                    IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12000);
+                    byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
+                    using (MemoryStream memoryStream = new MemoryStream(audioData))
                     {
-                        waveOut.Play();
-                        waveOut.Init(waveStream);
-                        while (waveOut.PlaybackState == PlaybackState.Playing)
+                        using (WaveStream waveStream = new RawSourceWaveStream(memoryStream, waveFormat))
                         {
-                            Thread.Sleep(100);
+                            waveOut.Init(waveStream);
+                            waveOut.Play();
+                            while (waveOut.PlaybackState == PlaybackState.Playing)
+                            {
+                                Thread.Sleep(100);
+                            }
                         }
                     }
                 }
             });
             Task.Delay(10000).Wait();
             udpClient.Close();
-            }
         }
-
-
-    };
+    }
 }
+
+
