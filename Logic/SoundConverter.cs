@@ -98,6 +98,7 @@ namespace Logic
             };
             Task.Delay(10000).Wait();
             waveInStreaming.StopRecording();
+            udpClient.Close();
         }
         public void ReceiveAudio(string IP)
         {
@@ -106,7 +107,7 @@ namespace Logic
             WaveOutEvent waveOut = new WaveOutEvent();
             WaveFormat waveFormat = new WaveFormat(44100, 16, 1); // Assuming the audio is in stereo and 44100 Hz sample rate
 
-            while (true)
+            Task.Run(() =>
             {
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12000);
                 byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
@@ -122,6 +123,9 @@ namespace Logic
                         }
                     }
                 }
+            });
+            Task.Delay(10000).Wait();
+            udpClient.Close();
             }
         }
 
