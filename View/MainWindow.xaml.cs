@@ -67,7 +67,7 @@ namespace View
 
         private void ReceiveAudio(object sender, RoutedEventArgs e)
         {
-
+            Converter.ReceiveAudio(this.IP_Receiver.Text);
         }
     }
 }

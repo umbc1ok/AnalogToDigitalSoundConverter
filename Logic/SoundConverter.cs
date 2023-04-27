@@ -29,6 +29,12 @@ namespace Logic
                 WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
                 BufferMilliseconds = 100 // Czas buforowania próbek
             };
+            waveInStreaming = new WaveInEvent
+            {
+                DeviceNumber = 0,
+                WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
+                BufferMilliseconds = 100 // Czas buforowania próbek
+            };
 
 
         }
@@ -83,27 +89,26 @@ namespace Logic
         }
         public void StreamAudio(string IP)
         {
-
-            Task.Run(()=> { waveIn.StartRecording(); });
+            UdpClient udpClient = new UdpClient(12000);
+            Task.Run(()=> { waveInStreaming.StartRecording(); });
             waveInStreaming.DataAvailable += (sender, args) =>
             {
                 // Send the audio data to the receiving PC
-                UdpClient udpClient = new UdpClient();
-                udpClient.Send(args.Buffer, args.BytesRecorded, new IPEndPoint(IPAddress.Parse(IP), 8000));
+                udpClient.Send(args.Buffer, args.BytesRecorded, new IPEndPoint(IPAddress.Parse(IP), 12000));
             };
             Task.Delay(10000).Wait();
             waveInStreaming.StopRecording();
         }
-        public void ReceiveAudio()
+        public void ReceiveAudio(string IP)
         {
-            UdpClient udpClient = new UdpClient(8000);
+            UdpClient udpClient = new UdpClient(12000);
             
             WaveOutEvent waveOut = new WaveOutEvent();
             WaveFormat waveFormat = new WaveFormat(44100, 16, 1); // Assuming the audio is in stereo and 44100 Hz sample rate
 
             while (true)
             {
-                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 8000);
+                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12000);
                 byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
                 using (MemoryStream memoryStream = new MemoryStream(audioData))
                 {
