@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using Microsoft.VisualBasic;
+using System;
 
 namespace Logic
 {
@@ -105,7 +106,10 @@ namespace Logic
             UdpClient udpClient = new UdpClient(12000);
 
             WaveOutEvent waveOut = new WaveOutEvent();
-            WaveFormat waveFormat = new WaveFormat(44100, 16, 1); // Assuming the audio is in stereo and 44100 Hz sample rate
+            WaveFormat waveFormat = new WaveFormat(44100, 16, 1);
+
+            byte[] buffer = new byte[4096]; // Adjust the buffer size as per your requirements
+            MemoryStream memoryStream = new MemoryStream();
 
             Task.Run(() =>
             {
@@ -113,17 +117,21 @@ namespace Logic
                 {
                     IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12000);
                     byte[] audioData = udpClient.Receive(ref RemoteIpEndPoint);
-                    using (MemoryStream memoryStream = new MemoryStream(audioData))
+                    memoryStream.Write(audioData, 0, audioData.Length);
+
+                    while (memoryStream.Length >= buffer.Length)
                     {
-                        using (WaveStream waveStream = new RawSourceWaveStream(memoryStream, waveFormat))
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        memoryStream.Read(buffer, 0, buffer.Length);
+
+                        using (WaveStream waveStream = new RawSourceWaveStream(new MemoryStream(buffer), waveFormat))
                         {
                             waveOut.Init(waveStream);
                             waveOut.Play();
-                            while (waveOut.PlaybackState == PlaybackState.Playing)
-                            {
-                                Thread.Sleep(100);
-                            }
                         }
+
+                        memoryStream.SetLength(memoryStream.Length - buffer.Length);
+                        memoryStream.Position = memoryStream.Length;
                     }
                 }
             });
