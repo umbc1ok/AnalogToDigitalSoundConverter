@@ -128,6 +128,7 @@ namespace Logic
                 }
             });
             Task.Delay(10000).Wait();
+            
             udpClient.Close();
         }
     }
