@@ -27,13 +27,13 @@ namespace Logic
             {
                 DeviceNumber = 0,
                 WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
-                BufferMilliseconds = 500 // Czas buforowania próbek
+                BufferMilliseconds = 100 // Czas buforowania próbek
             };
             waveInStreaming = new WaveInEvent
             {
                 DeviceNumber = 0,
                 WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
-                BufferMilliseconds = 500 // Czas buforowania próbek
+                BufferMilliseconds = 100 // Czas buforowania próbek
             };
 
 
@@ -123,7 +123,7 @@ namespace Logic
                 {
                     while (true)
                     {
-                        byte[] buffer = new byte[8192];
+                        byte[] buffer = new byte[131064];
                         int bytesRead = stream.Read(buffer, 0, buffer.Length);
                         if (bytesRead == 0)
                         {
@@ -137,7 +137,7 @@ namespace Logic
                                 waveOut.Play();
                                 while (waveOut.PlaybackState == PlaybackState.Playing)
                                 {
-                                    //Thread.Sleep(100);
+                                    Thread.Sleep(10);
                                 }
                             }
                         }
