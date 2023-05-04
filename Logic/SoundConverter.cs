@@ -103,7 +103,7 @@ namespace Logic
                         // Send the audio data to the receiving PC
                         stream.Write(args.Buffer, 0, args.BytesRecorded);
                     };
-                    Task.Delay(10000).Wait();
+                    Task.Delay(10000).Wait(); //THIS LINE DECIDES HOW LONG THE CONNECTION WILL LAST
                     waveInStreaming.StopRecording();
                 }
             }
