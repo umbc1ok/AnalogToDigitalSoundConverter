@@ -54,5 +54,20 @@ namespace View
                 return;
             }
         }
+
+        private void PlaySound(object sender, RoutedEventArgs e)
+        {
+            Converter.Play(this.FilePath.Text);
+        }
+
+        private void StreamAudio(object sender, RoutedEventArgs e)
+        {
+            Converter.StreamAudio(this.IP.Text);
+        }
+
+        private void ReceiveAudio(object sender, RoutedEventArgs e)
+        {
+            Converter.ReceiveAudio(this.IP_Receiver.Text);
+        }
     }
 }
