@@ -106,6 +106,7 @@ namespace Logic
                     Task.Delay(10000).Wait(); //THIS LINE DECIDES HOW LONG THE CONNECTION WILL LAST
                     waveInStreaming.StopRecording();
                 }
+                client.Close();
             }
             listener.Stop();
         }
@@ -143,6 +144,7 @@ namespace Logic
                         }
                     }
                 }
+                client.Close();
             }
         }
     }
