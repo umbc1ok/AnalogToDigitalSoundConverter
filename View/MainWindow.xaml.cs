@@ -27,12 +27,21 @@ namespace View
         {
             InitializeComponent();
             Converter = new SoundConverter();
-           
+            calculateSNR(this,new RoutedEventArgs());
         }
 
         private void StartRecording(object sender, RoutedEventArgs e)
         {
             Converter.SetSavePath(this.FilePath.Text);
+            try
+            {
+                Converter.sampleRate = int.Parse(sampleRate.Text);
+                Converter.bitDepth = int.Parse(bitDepth.Text);
+                Converter.channels = int.Parse(channels.Text);
+            }
+            catch(FormatException ex) {
+                // do nothing lol
+            }
             Converter.StartRecording();
         }
 
@@ -57,6 +66,16 @@ namespace View
 
         private void PlaySound(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                Converter.sampleRate = int.Parse(sampleRate.Text);
+                Converter.bitDepth = int.Parse(bitDepth.Text);
+                Converter.channels = int.Parse(channels.Text);
+            }
+            catch (FormatException ex)
+            {
+                // do nthing lol
+            }
             Converter.Play(this.FilePath.Text);
         }
 
@@ -69,5 +88,20 @@ namespace View
         {
             Converter.ReceiveAudio(this.IP_Receiver.Text);
         }
+        private void calculateSNR(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                double snratio = 20 * Math.Log10(Math.Pow(2, int.Parse(bitDepth.Text)));
+                SNR.Text = snratio.ToString();
+            }
+            catch (FormatException ex)
+            {
+                // do nthing lol
+            }
+            Converter.Play(this.FilePath.Text);
+        }
+
     }
 }
