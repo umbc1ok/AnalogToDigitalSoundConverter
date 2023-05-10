@@ -27,6 +27,7 @@ namespace View
         {
             InitializeComponent();
             Converter = new SoundConverter();
+            calculateSNR(this,new RoutedEventArgs());
         }
 
         private void StartRecording(object sender, RoutedEventArgs e)
@@ -87,5 +88,20 @@ namespace View
         {
             Converter.ReceiveAudio(this.IP_Receiver.Text);
         }
+        private void calculateSNR(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                double snratio = 20 * Math.Log10(Math.Pow(2, int.Parse(bitDepth.Text)));
+                SNR.Text = snratio.ToString();
+            }
+            catch (FormatException ex)
+            {
+                // do nthing lol
+            }
+            Converter.Play(this.FilePath.Text);
+        }
+
     }
 }
