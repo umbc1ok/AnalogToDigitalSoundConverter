@@ -6,4 +6,84 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="AudioFileInspector\AudioFileInspector.csproj" />
+    <None Include="MidiFileConverter\MidiFileConverter.csproj" />
+    <None Include="MixDiff\MixDiff.csproj" />
+    <None Include="NAudio.Asio\NAudio.Asio.csproj" />
+    <None Include="NAudio.Core\NAudio.Core.csproj" />
+    <None Include="NAudio.Extras\NAudio.Extras.csproj" />
+    <None Include="NAudio.Midi\NAudio.Midi.csproj" />
+    <None Include="NAudio.sln" />
+    <None Include="NAudio.Uap\NAudio.Uap.csproj" />
+    <None Include="NAudio.Wasapi\NAudio.Wasapi.csproj" />
+    <None Include="NAudio.WinForms\NAudio.WinForms.csproj" />
+    <None Include="NAudio.WinMM\NAudio.WinMM.csproj" />
+    <None Include="NAudioDemo\NAudioDemo.csproj" />
+    <None Include="NAudioTests\NAudioTests.csproj" />
+    <None Include="NAudioUniversalDemo\NAudioUniversalDemo.csproj" />
+    <None Include="NAudioWpfDemo\NAudioWpfDemo.csproj" />
+    <None Include="NAudio\NAudio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NAudioUniversalDemo\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioUniversalDemo\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\AudioPlaybackDemo\AudioPlaybackDemoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\DrumMachineDemo\DrumMachineDemoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\DrumMachineDemo\DrumPatternEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\EnumMediaFoundationTransforms\EnumMftView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\EqualizationDemo\EqualizationDemoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\FireAndForgetPlayback\FireAndForgetPlaybackView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\MediaFoundationEncode\MediaFoundationEncodeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\MediaFoundationPlayback\MediaFoundationPlaybackView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\MediaFoundationResample\MediaFoundationResampleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\PolygonWaveFormControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\PolylineWaveFormControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\SpectrumAnalyser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\WasapiCaptureDemo\RecordingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\WasapiCaptureDemo\WasapiCaptureDemoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="NAudioWpfDemo\WaveFormControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
 </Project>

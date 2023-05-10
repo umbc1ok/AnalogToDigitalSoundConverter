@@ -1,5 +1,6 @@
-﻿using NAudio;
+﻿
 using NAudio.Wave;
+
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
@@ -73,6 +74,11 @@ namespace Logic
                     // Utworzenie obiektu czytającego z pliku WAV
                     using (var audioFile = new AudioFileReader(filePath))
                     {
+
+                        WaveFormat waveF = new WaveFormat(sampleRate, bitDepth, channels);
+
+
+                        waveOut.OutputWaveFormat = waveF;
                         // Dodanie czytacza do odtwarzacza
                         waveOut.Init(audioFile);
 
