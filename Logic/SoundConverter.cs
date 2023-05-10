@@ -12,16 +12,26 @@ namespace Logic
     {
         WaveInEvent waveIn;
         WaveInEvent waveInStreaming;
-        string outputPath;
         WaveFileWriter writer;
 
+        public int sampleRate = 44100; // Częstotliwość próbkowania (przykładowo 44100 Hz)
+        public int bitDepth = 16; // Ilość bitów kwantyzacji (przykładowo 16 bitów)
+        public int channels = 2; // Liczba kanałów (przykładowo 1 dla mono)
 
+        private string outputPath;
         public SoundConverter()
         {
-            int sampleRate = 44100; // Częstotliwość próbkowania (przykładowo 44100 Hz)
-            int bitDepth = 16; // Ilość bitów kwantyzacji (przykładowo 16 bitów)
-            int channels = 1; // Liczba kanałów (przykładowo 1 dla mono)
+            sampleRate = 44100; // Częstotliwość próbkowania (przykładowo 44100 Hz)
+            bitDepth = 16; // Ilość bitów kwantyzacji (przykładowo 16 bitów)
+            channels = 2; // Liczba kanałów (przykładowo 1 dla mono)
 
+    }
+        public void SetSavePath(string path)
+        {
+            outputPath = path;
+        }
+        public void StartRecording()
+        {
             // Utworzenie obiektu nagrywania
             waveIn = new WaveInEvent
             {
@@ -35,21 +45,13 @@ namespace Logic
                 WaveFormat = new WaveFormat(sampleRate, bitDepth, channels),
                 BufferMilliseconds = 100 // Czas buforowania próbek
             };
-
-
-        }
-        public void SetSavePath(string path)
-        {
-            outputPath = path;
             writer = new WaveFileWriter(outputPath, waveIn.WaveFormat);
             // Obsługa zdarzenia zakończenia nagrywania
             waveIn.DataAvailable += (sender, e) =>
             {
                 writer.Write(e.Buffer, 0, e.BytesRecorded);
             };
-        }
-        public void StartRecording()
-        {
+
             waveIn.StartRecording();
         }
         public void StopRecording()
@@ -62,6 +64,7 @@ namespace Logic
 
         public void Play(string filePath)
         {
+
             Task.Run(() =>
             {
                 // Utworzenie obiektu odtwarzacza

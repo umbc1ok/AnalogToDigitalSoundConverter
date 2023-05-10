@@ -27,12 +27,20 @@ namespace View
         {
             InitializeComponent();
             Converter = new SoundConverter();
-           
         }
 
         private void StartRecording(object sender, RoutedEventArgs e)
         {
             Converter.SetSavePath(this.FilePath.Text);
+            try
+            {
+                Converter.sampleRate = int.Parse(sampleRate.Text);
+                Converter.bitDepth = int.Parse(bitDepth.Text);
+                Converter.channels = int.Parse(channels.Text);
+            }
+            catch(FormatException ex) {
+                // do nothing lol
+            }
             Converter.StartRecording();
         }
 
@@ -57,6 +65,16 @@ namespace View
 
         private void PlaySound(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                Converter.sampleRate = int.Parse(sampleRate.Text);
+                Converter.bitDepth = int.Parse(bitDepth.Text);
+                Converter.channels = int.Parse(channels.Text);
+            }
+            catch (FormatException ex)
+            {
+                // do nthing lol
+            }
             Converter.Play(this.FilePath.Text);
         }
 
